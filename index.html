@@ -1,81 +1,185 @@
+<!--
+  eM-world v0.1
+  Single-file HTML/CSS/JS ready for GitHub Pages deployment.
+
+  Instrukcja szybkiego wdrożenia (GitHub Pages):
+  1. Utwórz nowe repozytorium na GitHub (np. em-world).
+  2. Wgraj ten plik jako index.html do katalogu głównego repozytorium.
+  3. W ustawieniach repozytorium włącz GitHub Pages (branch: main / root).
+  4. Po kilku minutach strona będzie dostępna pod: https://<twoj-login>.github.io/<nazwa-repo>/
+
+  Gdzie edytować treści:
+  - HEADER: <header class="site-header"> ... </header>
+  - NAV: <nav class="main-nav"> ... </nav>
+  - LEWA KOLUMNA (transmisje, data/godzina): <aside class="sidebar"> ... </aside>
+  - OGŁOSZENIA / GŁÓWNA TREŚĆ: <main class="content"> ... </main>
+  - STOPKA i licznik: <footer> ... </footer>
+
+  Zmiany kolorów i fontów znajdziesz w sekcji :root w CSS.
+  Jeśli chcesz, mogę przygotować wersję z plikiem ZIP i instrukcją krok-po-kroku z zrzutami ekranu.
+-->
+
 <!doctype html>
-<div>Licznik odwiedzin:</div>
-<div id="visits" style="font-weight:700;font-size:18px;margin-top:6px">0</div>
-</div>
-</aside>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>eM-world | Twierdza myśli</title>
+  <meta name="description" content="eM-world — muzyka, grafika, teksty, obserwacje. Miejsce, gdzie zmysły się zatracają.">
 
+  <style>
+    :root{
+      --bg: #ffffff;
+      --ink: #0b0b0b;
+      --muted: #6b6b6b;
+      --accent: #2b2f6b; /* subtelne indygo */
+      --max-width: 1100px;
+      --gap: 18px;
+      --radius: 12px;
+      font-family: Inter, Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--ink)}
+    .wrap{max-width:var(--max-width);margin:28px auto;padding:18px}
 
-<main class="content" id="ogloszenia">
-<h2>Ogłoszenia</h2>
-<section class="notice" id="notices">
-<article>
-<h3>Witamy</h3>
-<p>To jest pierwsza wersja strony eM-world. Tutaj znajdziesz informacje o transmisjach, nowe fragmenty opowiadań, grafiki i krótkie obserwacje — wszystko w atmosferze zmysłowej i intymnej.</p>
-</article>
+    /* header */
+    .site-header{border:2px solid var(--ink);padding:26px;border-radius:8px;text-align:center}
+    .logo{font-weight:700;letter-spacing:6px;font-size:40px}
+    .tagline{margin-top:8px;color:var(--muted);font-style:italic}
 
+    /* nav */
+    .main-nav{display:flex;gap:10px;margin:16px 0;padding:10px;border-radius:8px}
+    .main-nav a{flex:1;text-align:center;padding:10px 8px;border:1px solid var(--muted);border-radius:6px;text-decoration:none;color:var(--ink);font-weight:600}
+    .main-nav a:hover{border-color:var(--accent);color:var(--accent)}
 
-<article style="margin-top:12px">
-<h3>Ostrzeżenie</h3>
-<p>Jeśli zauważysz podejrzane linki lub próby wyłudzeń — napisz natychmiast na adres w sekcji kontakt. Zachowaj ostrożność przy udostępnianiu danych.</p>
-</article>
+    /* grid */
+    .grid{display:grid;grid-template-columns:260px 1fr;gap:var(--gap);align-items:start}
+    .sidebar{border:1px solid #dedede;padding:12px;border-radius:8px;min-height:320px}
+    .content{border:1px solid #dedede;padding:14px;border-radius:8px;min-height:420px}
 
+    .sidebar h3,.content h2{margin:6px 0 12px 0}
 
-<!-- Miejsce na kolejne ogłoszenia -->
-</section>
-</main>
-</div>
+    /* Live / data */
+    .live{font-weight:700;font-size:18px}
+    .datetime{color:var(--muted);margin-top:6px}
+    .stream-box{margin-top:14px;padding:10px;border-radius:8px;background:#fafafa;border:1px solid #eee}
 
+    /* announcements area */
+    .notice{padding:12px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfbff);box-shadow:0 6px 18px rgba(0,0,0,0.03);min-height:300px}
+    .notice p{margin:10px 0;color:var(--muted)}
 
-<footer>
-<div>eM-world &reg;</div>
-<div style="font-size:13px">Język: <span class="pill">PL</span> &nbsp; <span style="margin-left:8px" class="pill">ENG</span></div>
-</footer>
+    /* footer */
+    footer{margin-top:18px;padding:10px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;color:var(--muted)}
 
+    /* responsive */
+    @media (max-width:800px){
+      .grid{grid-template-columns:1fr;}
+      .main-nav{flex-wrap:wrap}
+      .logo{font-size:32px}
+    }
 
-</div>
+    /* small visual touches */
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--muted);font-weight:600}
+    .accent{color:var(--accent)}
 
+  </style>
+</head>
+<body>
+  <div class="wrap">
 
-<script>
-// Simple datetime updater
-function updateDate(){
-const now = new Date();
-const opts = {weekday:'short',year:'numeric',month:'short',day:'numeric'};
-const dateStr = now.toLocaleDateString('pl-PL',opts);
-const timeStr = now.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
-document.getElementById('datetime').textContent = dateStr + ' • ' + timeStr;
-}
-setInterval(updateDate,1000);
-updateDate();
+    <header class="site-header">
+      <div class="logo">- eM &middot; WORLD -</div>
+      <div class="tagline">Witaj w świecie, gdzie zmysły się zatracają</div>
+    </header>
 
+    <nav class="main-nav" aria-label="Główna nawigacja">
+      <a href="#muzyka">Muzyka</a>
+      <a href="#grafika">Grafika</a>
+      <a href="#teksty">Teksty</a>
+      <a href="#obserwacje">Obserwacje</a>
+      <a href="#ogloszenia">Ogłoszenia</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
 
-// Simple visits counter using localStorage (not accurate across users; for demo)
-(function(){
-try{
-const key = 'emworld_visits_demo_v1';
-let v = localStorage.getItem(key);
-if(!v) v = 0;
-v = parseInt(v,10)+1;
-localStorage.setItem(key,v);
-document.getElementById('visits').textContent = v.toLocaleString('pl-PL');
-}catch(e){
-document.getElementById('visits').textContent = '—';
-}
-})();
+    <div class="grid">
+      <aside class="sidebar" aria-labelledby="liveTitle">
+        <div id="liveTitle" class="live">Nadchodzi: transmisja</div>
+        <div class="datetime" id="datetime">Ładowanie daty...</div>
 
+        <div class="stream-box">
+          <strong>Data i godzina</strong>
+          <div id="nextStream" style="margin-top:8px;color:var(--muted)">Brak zaplanowanych transmisji</div>
+        </div>
 
-// Placeholder: replace with real upcoming stream data
-(function(){
-const next = document.getElementById('nextStream');
-// If you want to dynamically set this, replace below with fetch from JSON or API
-const demo = {date:'2025-07-20', time:'21:00', title:'Transmisja muzyczna'};
-next.textContent = demo.date + ' • ' + demo.time + ' — ' + demo.title;
-})();
+        <div style="margin-top:16px;font-size:13px;color:var(--muted)">
+          <div>Licznik odwiedzin:</div>
+          <div id="visits" style="font-weight:700;font-size:18px;margin-top:6px">0</div>
+        </div>
+      </aside>
 
+      <main class="content" id="ogloszenia">
+        <h2>Ogłoszenia</h2>
+        <section class="notice" id="notices">
+          <article>
+            <h3>Witamy</h3>
+            <p>To jest pierwsza wersja strony eM-world. Tutaj znajdziesz informacje o transmisjach, nowe fragmenty opowiadań, grafiki i krótkie obserwacje — wszystko w atmosferze zmysłowej i intymnej.</p>
+          </article>
 
-// Accessibility: focus outlines when tabbing
-document.addEventListener('keydown',function(e){
-if(e.key==='Tab') document.body.classList.add('show-focus');
-});
-</script>
+          <article style="margin-top:12px">
+            <h3>Ostrzeżenie</h3>
+            <p>Jeśli zauważysz podejrzane linki lub próby wyłudzeń — napisz natychmiast na adres w sekcji kontakt. Zachowaj ostrożność przy udostępnianiu danych.</p>
+          </article>
+
+          <!-- Miejsce na kolejne ogłoszenia -->
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <div>eM-world &reg;</div>
+      <div style="font-size:13px">Język: <span class="pill">PL</span> &nbsp; <span style="margin-left:8px" class="pill">ENG</span></div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Simple datetime updater
+    function updateDate(){
+      const now = new Date();
+      const opts = {weekday:'short',year:'numeric',month:'short',day:'numeric'};
+      const dateStr = now.toLocaleDateString('pl-PL',opts);
+      const timeStr = now.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('datetime').textContent = dateStr + ' • ' + timeStr;
+    }
+    setInterval(updateDate,1000);
+    updateDate();
+
+    // Simple visits counter using localStorage (not accurate across users; for demo)
+    (function(){
+      try{
+        const key = 'emworld_visits_demo_v1';
+        let v = localStorage.getItem(key);
+        if(!v) v = 0;
+        v = parseInt(v,10)+1;
+        localStorage.setItem(key,v);
+        document.getElementById('visits').textContent = v.toLocaleString('pl-PL');
+      }catch(e){
+        document.getElementById('visits').textContent = '—';
+      }
+    })();
+
+    // Placeholder: replace with real upcoming stream data
+    (function(){
+      const next = document.getElementById('nextStream');
+      // If you want to dynamically set this, replace below with fetch from JSON or API
+      const demo = {date:'2025-07-20', time:'21:00', title:'Transmisja muzyczna'};
+      next.textContent = demo.date + ' • ' + demo.time + ' — ' + demo.title;
+    })();
+
+    // Accessibility: focus outlines when tabbing
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Tab') document.body.classList.add('show-focus');
+    });
+  </script>
 </body>
 </html>
